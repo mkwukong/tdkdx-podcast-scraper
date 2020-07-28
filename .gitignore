@@ -1,0 +1,5 @@
+# node mod
+node_modules/
+
+# downloaded files
+files/
