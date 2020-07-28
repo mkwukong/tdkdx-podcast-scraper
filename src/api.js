@@ -36,22 +36,57 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var api_1 = require("./api");
-var HOME_PAGE_URL = "https://tdkdx.com/";
-function main() {
+exports.getDownloadLink = void 0;
+var axios_1 = require("axios");
+var cheerio = require("cheerio");
+var utils_1 = require("./utils");
+var USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0";
+var header = {
+    referrer: "https://tdkdx.com",
+    accept: "*/*",
+    "user-agent": USER_AGENT,
+    "accept-language": "en-GB,en;q=0.5"
+};
+function getDownloadLink(podcastId, url) {
     return __awaiter(this, void 0, void 0, function () {
-        var podcastId, downloadUrl;
+        var resp, err_1, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    podcastId = 200;
-                    return [4 /*yield*/, api_1.getDownloadLink(podcastId, HOME_PAGE_URL)];
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1["default"].get("" + url + podcastId + "s", {
+                            headers: header
+                        })];
                 case 1:
-                    downloadUrl = _a.sent();
-                    console.log(downloadUrl);
-                    return [2 /*return*/];
+                    resp = _a.sent();
+                    return [2 /*return*/, parseResponse(resp)];
+                case 2:
+                    err_1 = _a.sent();
+                    console.log(podcastId + "s dosen't exist");
+                    return [3 /*break*/, 3];
+                case 3:
+                    utils_1.delay(1000);
+                    _a.label = 4;
+                case 4:
+                    _a.trys.push([4, 6, , 7]);
+                    return [4 /*yield*/, axios_1["default"].get("" + url + podcastId, {
+                            headers: header
+                        })];
+                case 5:
+                    resp = _a.sent();
+                    return [2 /*return*/, parseResponse(resp)];
+                case 6:
+                    err_2 = _a.sent();
+                    console.log(podcastId + " dosen't exist");
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });
 }
-main()["catch"](function () { return console.log("Page dosen't exist"); });
+exports.getDownloadLink = getDownloadLink;
+function parseResponse(resp) {
+    var $ = cheerio.load(resp.data);
+    var podcastDownload = $("a[class=powerpress_link_d]");
+    return podcastDownload[0].attribs.href;
+}

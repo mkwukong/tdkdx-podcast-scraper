@@ -1,7 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import * as cheerio from "cheerio";
-
-const PAGE_URL = "https://tdkdx.com/1800s";
+import { delay } from "./utils";
 
 const USER_AGENT =
   "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0";
@@ -13,18 +12,31 @@ const header = {
   "accept-language": "en-GB,en;q=0.5",
 };
 
-export async function getDownloadLink(podcastId: number) {
+export async function getDownloadLink(podcastId: number, url: string) {
+  let resp;
   try {
-    const resp = await axios.get(PAGE_URL, {
+    resp = await axios.get(`${url}${podcastId}s`, {
       headers: header,
     });
+    return parseResponse(resp);
+  } catch (err) {
+    console.log(`${podcastId}s dosen't exist`);
+  }
 
-    console.log(resp.status);
-    const $ = cheerio.load(resp.data);
-    const podcastDownload = $("a[class=powerpress_link_d]");
-    console.log(podcastDownload[0].attribs.href);
-  } catch (err) {}
+  delay(1000);
 
   try {
-  } catch (err) {}
+    resp = await axios.get(`${url}${podcastId}`, {
+      headers: header,
+    });
+    return parseResponse(resp);
+  } catch (err) {
+    console.log(`${podcastId} dosen't exist`);
+  }
+}
+
+function parseResponse(resp: AxiosResponse) {
+  const $ = cheerio.load(resp.data);
+  const podcastDownload = $("a[class=powerpress_link_d]");
+  return podcastDownload[0].attribs.href;
 }
