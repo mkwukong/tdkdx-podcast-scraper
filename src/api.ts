@@ -23,7 +23,7 @@ export async function getDownloadLink(podcastId: number, url: string) {
     console.log(`${podcastId}s dosen't exist`);
   }
 
-  delay(1000);
+  await delay(1000);
 
   try {
     resp = await axios.get(`${url}${podcastId}`, {
