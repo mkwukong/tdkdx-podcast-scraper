@@ -36,51 +36,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getDownloadLink = void 0;
+exports.saveFile = void 0;
 var axios_1 = require("axios");
-var cheerio = require("cheerio");
-var utils_1 = require("./utils");
-function getDownloadLink(podcastId, url) {
+var fs = require("fs");
+function saveFile(url, savePath) {
     return __awaiter(this, void 0, void 0, function () {
-        var resp, err_1, err_2;
+        var resp, splittedPath, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, axios_1["default"].get("" + url + podcastId + "s", {
-                            headers: utils_1.header
+                    console.log(url);
+                    return [4 /*yield*/, axios_1["default"].request({
+                            method: "GET",
+                            responseType: "stream",
+                            url: url
                         })];
                 case 1:
                     resp = _a.sent();
-                    return [2 /*return*/, parseResponse(resp)];
+                    splittedPath = void 0;
+                    if (url !== undefined) {
+                        splittedPath = url.split("/");
+                        console.log("" + savePath + splittedPath[splittedPath.length - 1]);
+                        resp.data.pipe(fs.createWriteStream("" + savePath + splittedPath[splittedPath.length - 1]));
+                    }
+                    console.log("Done");
+                    return [3 /*break*/, 3];
                 case 2:
                     err_1 = _a.sent();
-                    console.log(podcastId + "s dosen't exist");
+                    console.log(err_1);
                     return [3 /*break*/, 3];
-                case 3: return [4 /*yield*/, utils_1.delay(1000)];
-                case 4:
-                    _a.sent();
-                    _a.label = 5;
-                case 5:
-                    _a.trys.push([5, 7, , 8]);
-                    return [4 /*yield*/, axios_1["default"].get("" + url + podcastId, {
-                            headers: utils_1.header
-                        })];
-                case 6:
-                    resp = _a.sent();
-                    return [2 /*return*/, parseResponse(resp)];
-                case 7:
-                    err_2 = _a.sent();
-                    console.log(podcastId + " dosen't exist");
-                    return [3 /*break*/, 8];
-                case 8: return [2 /*return*/];
+                case 3: return [2 /*return*/];
             }
         });
     });
 }
-exports.getDownloadLink = getDownloadLink;
-function parseResponse(resp) {
-    var $ = cheerio.load(resp.data);
-    var podcastDownload = $("a[class=powerpress_link_d]");
-    return podcastDownload[0].attribs.href;
-}
+exports.saveFile = saveFile;

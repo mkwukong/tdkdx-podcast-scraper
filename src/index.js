@@ -37,7 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var api_1 = require("./api");
+var save_file_1 = require("./save-file");
 var HOME_PAGE_URL = "https://tdkdx.com/";
+var PATH = "../files/";
 function main() {
     return __awaiter(this, void 0, void 0, function () {
         var podcastId, downloadUrl;
@@ -48,7 +50,7 @@ function main() {
                     return [4 /*yield*/, api_1.getDownloadLink(podcastId, HOME_PAGE_URL)];
                 case 1:
                     downloadUrl = _a.sent();
-                    console.log(downloadUrl);
+                    save_file_1.saveFile(downloadUrl, PATH);
                     return [2 /*return*/];
             }
         });

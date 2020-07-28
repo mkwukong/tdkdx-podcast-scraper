@@ -1,16 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import * as cheerio from "cheerio";
-import { delay } from "./utils";
-
-const USER_AGENT =
-  "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0";
-
-const header = {
-  referrer: "https://tdkdx.com",
-  accept: "*/*",
-  "user-agent": USER_AGENT,
-  "accept-language": "en-GB,en;q=0.5",
-};
+import { delay, header } from "./utils";
 
 export async function getDownloadLink(podcastId: number, url: string) {
   let resp;
