@@ -38,20 +38,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var api_1 = require("./api");
 var save_file_1 = require("./save-file");
+var utils_1 = require("./utils");
 var HOME_PAGE_URL = "https://tdkdx.com/";
 var PATH = "../files/";
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var podcastId, downloadUrl;
+        var podcastIds, i, downloadUrl;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    podcastId = 200;
-                    return [4 /*yield*/, api_1.getDownloadLink(podcastId, HOME_PAGE_URL)];
+                    podcastIds = [
+                        1800,
+                        1799,
+                        1798,
+                        1797,
+                        1796,
+                        1795,
+                        1794,
+                        1793,
+                        1792,
+                        1791,
+                        1790,
+                        1789,
+                        1788,
+                        1787,
+                        1786,
+                    ];
+                    i = 0;
+                    _a.label = 1;
                 case 1:
+                    if (!(i < podcastIds.length)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, api_1.getDownloadLink(podcastIds[i], HOME_PAGE_URL)];
+                case 2:
                     downloadUrl = _a.sent();
+                    return [4 /*yield*/, utils_1.delay(i % 3 == 0 ? 2500 : 1500)];
+                case 3:
+                    _a.sent();
                     save_file_1.saveFile(downloadUrl, PATH);
-                    return [2 /*return*/];
+                    _a.label = 4;
+                case 4:
+                    ++i;
+                    return [3 /*break*/, 1];
+                case 5: return [2 /*return*/];
             }
         });
     });
