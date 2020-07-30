@@ -39,7 +39,7 @@ exports.__esModule = true;
 exports.getDownloadLink = void 0;
 var axios_1 = require("axios");
 var cheerio = require("cheerio");
-var utils_1 = require("./utils");
+var utils_1 = require("./utils/utils");
 function getDownloadLink(podcastId, url) {
     return __awaiter(this, void 0, void 0, function () {
         var resp, err_1, err_2;

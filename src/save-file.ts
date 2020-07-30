@@ -1,5 +1,4 @@
 import axios from "axios";
-import { header } from "./utils";
 import * as fs from "fs";
 
 export async function saveFile(url: string | undefined, savePath: string) {

@@ -36,52 +36,68 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var yargs = require("yargs");
 var api_1 = require("./api");
 var save_file_1 = require("./save-file");
-var utils_1 = require("./utils");
+var utils_1 = require("./utils/utils");
+var checkings_1 = require("./utils/checkings");
+yargs.version("1.0.0");
+yargs.command({
+    command: "get",
+    describe: "Download tdkdx podcasts from --start to --end",
+    builder: {
+        start: {
+            describe: "Lower boundary",
+            demandOption: true,
+            type: "number"
+        },
+        end: {
+            describe: "Upper boundary",
+            demandOption: false,
+            type: "number"
+        }
+    },
+    handler: main
+}).argv;
 var HOME_PAGE_URL = "https://tdkdx.com/";
 var PATH = "../files/";
-function main() {
+function main(argv) {
     return __awaiter(this, void 0, void 0, function () {
-        var podcastIds, i, downloadUrl;
+        var min_1, max_1, i, downloadUrl, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    podcastIds = [
-                        1800,
-                        1799,
-                        1798,
-                        1797,
-                        1796,
-                        1795,
-                        1794,
-                        1793,
-                        1792,
-                        1791,
-                        1790,
-                        1789,
-                        1788,
-                        1787,
-                        1786,
-                    ];
-                    i = 0;
-                    _a.label = 1;
+                    _a.trys.push([0, 7, , 8]);
+                    min_1 = 0;
+                    max_1 = 0;
+                    return [4 /*yield*/, checkings_1.verifyParams(argv.start, argv.end).then(function (res) {
+                            min_1 = Math.min(res.start, res.end);
+                            max_1 = Math.max(res.start, res.end);
+                        })];
                 case 1:
-                    if (!(i < podcastIds.length)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, api_1.getDownloadLink(podcastIds[i], HOME_PAGE_URL)];
+                    _a.sent();
+                    i = min_1;
+                    _a.label = 2;
                 case 2:
+                    if (!(i < max_1)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, api_1.getDownloadLink(i, HOME_PAGE_URL)];
+                case 3:
                     downloadUrl = _a.sent();
                     return [4 /*yield*/, utils_1.delay(i % 3 == 0 ? 2500 : 1500)];
-                case 3:
+                case 4:
                     _a.sent();
                     save_file_1.saveFile(downloadUrl, PATH);
-                    _a.label = 4;
-                case 4:
+                    _a.label = 5;
+                case 5:
                     ++i;
-                    return [3 /*break*/, 1];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 2];
+                case 6: return [3 /*break*/, 8];
+                case 7:
+                    err_1 = _a.sent();
+                    console.log(err_1);
+                    return [3 /*break*/, 8];
+                case 8: return [2 /*return*/];
             }
         });
     });
 }
-main()["catch"](function () { return console.log("Page dosen't exist"); });

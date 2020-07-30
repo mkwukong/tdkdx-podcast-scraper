@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import * as cheerio from "cheerio";
-import { delay, header } from "./utils";
+import { delay, header } from "./utils/utils";
 
 export async function getDownloadLink(podcastId: number, url: string) {
   let resp;
